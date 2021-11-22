@@ -1,7 +1,7 @@
 # Проект «Киноман»
 
 * Студент: [Екатерина Морозова](https://up.htmlacademy.ru/ecmascript/16/user/1643657).
-* Наставник: `Неизвестно`.
+* Наставник: [Антон Попов](https://htmlacademy.ru/profile/joker).
 
 ---
 
