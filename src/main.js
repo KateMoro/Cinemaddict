@@ -16,24 +16,24 @@ const pageMain = document.querySelector('.main');
 const pageFooter = document.querySelector('.footer');
 const pageFooterStatistics = pageFooter.querySelector('.footer__statistics');
 
-renderTemplate(pageHeader, createProfileTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(pageMain, createMainNavigationTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(pageMain, createSortTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(pageMain, createFilmsTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(pageFooterStatistics, createFooterStatisticsTemplate(), RenderPosition.BEFOREEND);
+renderTemplate(pageHeader, createProfileTemplate());
+renderTemplate(pageMain, createMainNavigationTemplate());
+renderTemplate(pageMain, createSortTemplate());
+renderTemplate(pageMain, createFilmsTemplate());
+renderTemplate(pageFooterStatistics, createFooterStatisticsTemplate());
 renderTemplate(pageFooter, createFilmDetailsPopupTemplate(), RenderPosition.AFTEREND);
 
 const filmList = pageMain.querySelector('.films-list__container');
 const filmListExtra = pageMain.querySelectorAll('.films-list--extra .films-list__container');
 
 for (let i = 0; i < CARD_COUNT; i++) {
-  renderTemplate(filmList, createFilmCardTemplate(), RenderPosition.BEFOREEND);
+  renderTemplate(filmList, createFilmCardTemplate());
 }
 
-renderTemplate(filmList, createLoadMoreButtonTemplate(), RenderPosition.BEFOREEND);
+renderTemplate(filmList, createLoadMoreButtonTemplate());
 
 filmListExtra.forEach( (list) => {
   for (let i = 0; i < EXTRA_CARD_COUNT; i++) {
-    renderTemplate(list, createFilmCardTemplate(), RenderPosition.BEFOREEND);
+    renderTemplate(list, createFilmCardTemplate());
   }
 });
