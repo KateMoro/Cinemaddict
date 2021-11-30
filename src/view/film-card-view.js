@@ -1,21 +1,41 @@
-export const createFilmCardTemplate = () => (`
-  <article class="film-card">
+import { getFormattedDate } from './../utils.js';
+
+export const createFilmCardTemplate = ({title, totalRating, releaseDate, runtime, genres, poster, description, comments, isWatchList, isWatched, isFavorite}) => {
+
+  const activeClassName = (item) => item ? 'film-card__controls-item--active' : '';
+
+  return `<article class="film-card">
     <a class="film-card__link">
-      <h3 class="film-card__title">Popeye the Sailor Meets Sindbad the Sailor</h3>
-      <p class="film-card__rating">6.3</p>
+      <h3 class="film-card__title">${title}</h3>
+      <p class="film-card__rating">${totalRating}</p>
       <p class="film-card__info">
-        <span class="film-card__year">1936</span>
-        <span class="film-card__duration">16m</span>
-        <span class="film-card__genre">Cartoon</span>
+        <span class="film-card__year">${getFormattedDate(releaseDate, 'YYYY')}</span>
+        <span class="film-card__duration">${runtime}</span>
+        <span class="film-card__genre">${genres[0]}</span>
       </p>
-      <img src="./images/posters/popeye-meets-sinbad.png" alt="" class="film-card__poster">
-      <p class="film-card__description">In this short, Sindbad the Sailor (presumably Bluto playing a "role") proclaims himself, in song, to be the greatest sailor, adventurer and…</p>
-      <span class="film-card__comments">0 comments</span>
+      <img src=${poster} alt="" class="film-card__poster">
+      <p class="film-card__description">${description}</p>
+      <span class="film-card__comments">${comments.length} comments</span>
     </a>
     <div class="film-card__controls">
-      <button class="film-card__controls-item film-card__controls-item--add-to-watchlist film-card__controls-item--active" type="button">Add to watchlist</button>
-      <button class="film-card__controls-item film-card__controls-item--mark-as-watched film-card__controls-item--active" type="button">Mark as watched</button>
-      <button class="film-card__controls-item film-card__controls-item--favorite film-card__controls-item--active" type="button">Mark as favorite</button>
+      <button class="film-card__controls-item
+                     film-card__controls-item--add-to-watchlist
+                     ${activeClassName(isWatchList)}"
+                     type="button">
+                     Add to watchlist
+      </button>
+      <button class="film-card__controls-item
+                     film-card__controls-item--mark-as-watched
+                     ${activeClassName(isWatched)}"
+                     type="button">
+                     Mark as watched
+      </button>
+      <button class="film-card__controls-item
+                     film-card__controls-item--favorite
+                     ${activeClassName(isFavorite)}"
+                     type="button">
+                     Mark as favorite
+      </button>
     </div>
-  </article>
-`);
+  </article>`;
+};
