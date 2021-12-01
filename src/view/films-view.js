@@ -1,4 +1,6 @@
-export const createFilmsTemplate = () => (`
+import { createElement } from '../render.js';
+
+const createFilmsTemplate = () => (`
   <section class="films">
     <section class="films-list">
       <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
@@ -16,3 +18,23 @@ export const createFilmsTemplate = () => (`
     </section>
   </section>
 `);
+
+export default class FilmsView {
+  #element = null;
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createFilmsTemplate();
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}
