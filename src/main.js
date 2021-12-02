@@ -1,4 +1,4 @@
-import { render, RenderPosition } from './render.js';
+import { render } from './render.js';
 import ProfileView from './view/profile-view.js';
 import MainNavigationView from './view/main-navigation-view.js';
 import SortView from './view/sort-view.js';
@@ -25,7 +25,26 @@ render(pageMain, new MainNavigationView().element);
 render(pageMain, new SortView().element);
 render(pageMain, new FilmsView().element);
 render(pageFooterStatistics, new FooterStatisticsView().element);
-render(pageFooter, new FilmDetailsPopupView(cards[0]).element, RenderPosition.AFTEREND);
+
+const renderFilmCard = (filmsContainer, card) => {
+  const filmCardComponent = new FilmCardView(card);
+  const filmDetailsPopupComponent = new FilmDetailsPopupView(card);
+
+  const appendFilmDetailsPopup = () => {
+    filmsContainer.appendChild(filmDetailsPopupComponent.element);
+    document.body.classList.add('hide-overflow');
+  };
+
+  const removeFilmDetailsPopup = () => {
+    filmsContainer.removeChild(filmDetailsPopupComponent.element);
+    document.body.classList.remove('hide-overflow');
+  };
+
+  filmCardComponent.element.querySelector('.film-card__link').addEventListener('click', appendFilmDetailsPopup);
+  filmDetailsPopupComponent.element.querySelector('.film-details__close-btn').addEventListener('click', removeFilmDetailsPopup);
+
+  render(filmsContainer, filmCardComponent.element);
+};
 
 const filmList = pageMain.querySelector('.films-list:first-child');
 const filmListContainer = filmList.querySelector('.films-list__container');
@@ -33,7 +52,7 @@ const filmListTopRated = pageMain.querySelector('.films-list:nth-child(2) .films
 const filmListMostCommented = pageMain.querySelector('.films-list:nth-child(3) .films-list__container');
 
 for (let i = 0; i < Math.min(cards.length, CARD_COUNT_PER_STEP); i++) {
-  render(filmListContainer, new FilmCardView(cards[i]).element);
+  renderFilmCard(filmListContainer, cards[i]);
 }
 
 if (cards.length > CARD_COUNT_PER_STEP) {
@@ -47,7 +66,7 @@ if (cards.length > CARD_COUNT_PER_STEP) {
     evt.preventDefault();
     cards
       .slice(renderedCardCount, renderedCardCount + CARD_COUNT_PER_STEP)
-      .forEach((card) => render(filmListContainer, new FilmCardView(card).element));
+      .forEach((card) => renderFilmCard(filmListContainer, card));
 
     renderedCardCount += CARD_COUNT_PER_STEP;
 
@@ -62,9 +81,9 @@ const cardsSortedByRating = cards.slice().sort((a, b) => b.totalRating - a.total
 const cardsSortedByCommentsNumber = cards.slice().sort((a, b) => b.comments.length - a.comments.length);
 
 for (let i = 0; i < EXTRA_CARD_COUNT; i++) {
-  render(filmListTopRated, new FilmCardView(cardsSortedByRating[i]).element);
+  renderFilmCard(filmListTopRated, cardsSortedByRating[i]);
 }
 
 for (let i = 0; i < EXTRA_CARD_COUNT; i++) {
-  render(filmListMostCommented, new FilmCardView(cardsSortedByCommentsNumber[i]).element);
+  renderFilmCard(filmListMostCommented, cardsSortedByCommentsNumber[i]);
 }
