@@ -1,6 +1,7 @@
-import { getFormattedDate } from './../utils.js';
+import { createElement } from '../render.js';
+import { getFormattedDate } from '../utils.js';
 
-export const createFilmCardTemplate = ({title, totalRating, releaseDate, runtime, genres, poster, description, comments, isWatchList, isWatched, isFavorite}) => {
+const createFilmCardTemplate = ({title, totalRating, releaseDate, runtime, genres, poster, description, comments, isWatchList, isWatched, isFavorite}) => {
 
   const activeClassName = (item) => item ? 'film-card__controls-item--active' : '';
 
@@ -39,3 +40,28 @@ export const createFilmCardTemplate = ({title, totalRating, releaseDate, runtime
     </div>
   </article>`;
 };
+
+export default class FilmCardView {
+  #element = null;
+  #card = null;
+
+  constructor(card) {
+    this.#card = card;
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createFilmCardTemplate(this.#card);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}

@@ -1,6 +1,7 @@
-import { getFormattedDate } from './../utils.js';
+import { createElement } from '../render.js';
+import { getFormattedDate } from '../utils.js';
 
-export const createFilmDetailsPopupTemplate = ({title, alternativeTitle, totalRating, poster, ageRating, director, writers, actors, releaseDate, releaseCountry, runtime, genres, description, isWatchList, isWatched, isFavorite, comments}) => {
+const createFilmDetailsPopupTemplate = ({title, alternativeTitle, totalRating, poster, ageRating, director, writers, actors, releaseDate, releaseCountry, runtime, genres, description, isWatchList, isWatched, isFavorite, comments}) => {
 
   const activeClassName = (item) => item ? 'film-details__control-button--active' : '';
 
@@ -133,3 +134,28 @@ export const createFilmDetailsPopupTemplate = ({title, alternativeTitle, totalRa
     </form>
   </section>`;
 };
+
+export default class FilmDetailsPopupView {
+  #element = null;
+  #card = null;
+
+  constructor(card) {
+    this.#card = card;
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createFilmDetailsPopupTemplate(this.#card);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}
