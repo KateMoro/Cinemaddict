@@ -20,11 +20,11 @@ const pageMain = document.querySelector('.main');
 const pageFooter = document.querySelector('.footer');
 const pageFooterStatistics = pageFooter.querySelector('.footer__statistics');
 
-render(pageHeader, new ProfileView().element);
-render(pageMain, new MainNavigationView().element);
-render(pageMain, new SortView().element);
-render(pageMain, new FilmsView().element);
-render(pageFooterStatistics, new FooterStatisticsView().element);
+render(pageHeader, new ProfileView());
+render(pageMain, new MainNavigationView());
+render(pageMain, new SortView());
+render(pageMain, new FilmsView());
+render(pageFooterStatistics, new FooterStatisticsView());
 
 const renderFilmCard = (filmsContainer, card) => {
   const filmCardComponent = new FilmCardView(card);
@@ -43,7 +43,7 @@ const renderFilmCard = (filmsContainer, card) => {
   filmCardComponent.setLinkClickHandler(appendFilmDetailsPopup);
   filmDetailsPopupComponent.setCloseButtonClickHandler(removeFilmDetailsPopup);
 
-  render(filmsContainer, filmCardComponent.element);
+  render(filmsContainer, filmCardComponent);
 };
 
 const filmList = pageMain.querySelector('.films-list:first-child');
@@ -59,7 +59,7 @@ if (cards.length > CARD_COUNT_PER_STEP) {
   let renderedCardCount = CARD_COUNT_PER_STEP;
 
   const loadMoreButton = new LoadMoreButtonView();
-  render(filmList, loadMoreButton.element);
+  render(filmList, loadMoreButton);
 
   loadMoreButton.setButtonClickHandler( () => {
     cards
