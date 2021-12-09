@@ -40,8 +40,8 @@ const renderFilmCard = (filmsContainer, card) => {
     document.body.classList.remove('hide-overflow');
   };
 
-  filmCardComponent.element.querySelector('.film-card__link').addEventListener('click', appendFilmDetailsPopup);
-  filmDetailsPopupComponent.element.querySelector('.film-details__close-btn').addEventListener('click', removeFilmDetailsPopup);
+  filmCardComponent.setLinkClickHandler(appendFilmDetailsPopup);
+  filmDetailsPopupComponent.setCloseButtonClickHandler(removeFilmDetailsPopup);
 
   render(filmsContainer, filmCardComponent.element);
 };
@@ -58,12 +58,10 @@ for (let i = 0; i < Math.min(cards.length, CARD_COUNT_PER_STEP); i++) {
 if (cards.length > CARD_COUNT_PER_STEP) {
   let renderedCardCount = CARD_COUNT_PER_STEP;
 
-  render(filmList, new LoadMoreButtonView().element);
+  const loadMoreButton = new LoadMoreButtonView();
+  render(filmList, loadMoreButton.element);
 
-  const loadMoreButton = filmList.querySelector('.films-list__show-more');
-
-  loadMoreButton.addEventListener('click', (evt) => {
-    evt.preventDefault();
+  loadMoreButton.setButtonClickHandler( () => {
     cards
       .slice(renderedCardCount, renderedCardCount + CARD_COUNT_PER_STEP)
       .forEach((card) => renderFilmCard(filmListContainer, card));
