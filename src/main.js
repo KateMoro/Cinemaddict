@@ -20,11 +20,11 @@ const pageMain = document.querySelector('.main');
 const pageFooter = document.querySelector('.footer');
 const pageFooterStatistics = pageFooter.querySelector('.footer__statistics');
 
-render(pageHeader, new ProfileView().element);
-render(pageMain, new MainNavigationView().element);
-render(pageMain, new SortView().element);
-render(pageMain, new FilmsView().element);
-render(pageFooterStatistics, new FooterStatisticsView().element);
+render(pageHeader, new ProfileView());
+render(pageMain, new MainNavigationView());
+render(pageMain, new SortView());
+render(pageMain, new FilmsView());
+render(pageFooterStatistics, new FooterStatisticsView());
 
 const renderFilmCard = (filmsContainer, card) => {
   const filmCardComponent = new FilmCardView(card);
@@ -40,10 +40,10 @@ const renderFilmCard = (filmsContainer, card) => {
     document.body.classList.remove('hide-overflow');
   };
 
-  filmCardComponent.element.querySelector('.film-card__link').addEventListener('click', appendFilmDetailsPopup);
-  filmDetailsPopupComponent.element.querySelector('.film-details__close-btn').addEventListener('click', removeFilmDetailsPopup);
+  filmCardComponent.setLinkClickHandler(appendFilmDetailsPopup);
+  filmDetailsPopupComponent.setCloseButtonClickHandler(removeFilmDetailsPopup);
 
-  render(filmsContainer, filmCardComponent.element);
+  render(filmsContainer, filmCardComponent);
 };
 
 const filmList = pageMain.querySelector('.films-list:first-child');
@@ -58,12 +58,10 @@ for (let i = 0; i < Math.min(cards.length, CARD_COUNT_PER_STEP); i++) {
 if (cards.length > CARD_COUNT_PER_STEP) {
   let renderedCardCount = CARD_COUNT_PER_STEP;
 
-  render(filmList, new LoadMoreButtonView().element);
+  const loadMoreButton = new LoadMoreButtonView();
+  render(filmList, loadMoreButton);
 
-  const loadMoreButton = filmList.querySelector('.films-list__show-more');
-
-  loadMoreButton.addEventListener('click', (evt) => {
-    evt.preventDefault();
+  loadMoreButton.setButtonClickHandler( () => {
     cards
       .slice(renderedCardCount, renderedCardCount + CARD_COUNT_PER_STEP)
       .forEach((card) => renderFilmCard(filmListContainer, card));

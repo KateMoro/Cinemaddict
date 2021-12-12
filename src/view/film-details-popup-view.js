@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from './abstract-view.js';
 import { getFormattedDate } from '../utils.js';
 
 const createFilmDetailsPopupTemplate = ({title, alternativeTitle, totalRating, poster, ageRating, director, writers, actors, releaseDate, releaseCountry, runtime, genres, description, isWatchList, isWatched, isFavorite, comments}) => {
@@ -135,27 +135,25 @@ const createFilmDetailsPopupTemplate = ({title, alternativeTitle, totalRating, p
   </section>`;
 };
 
-export default class FilmDetailsPopupView {
-  #element = null;
+export default class FilmDetailsPopupView extends AbstractView {
   #card = null;
 
   constructor(card) {
+    super();
     this.#card = card;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return createFilmDetailsPopupTemplate(this.#card);
   }
 
-  removeElement() {
-    this.#element = null;
+  setCloseButtonClickHandler = (callback) => {
+    this._callback.closeButtonClick = callback;
+    this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#closeButtonClickHandler);
+  }
+
+  #closeButtonClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.closeButtonClick();
   }
 }
