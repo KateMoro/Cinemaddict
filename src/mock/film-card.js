@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { nanoid } from 'nanoid';
 import { getRandomNumber, getRandomArrayElement, getRandomArray, getTimeFromMins } from './../utils.js';
 import { generateComment } from './comment.js';
 
@@ -102,6 +103,7 @@ const generateReleaseDate = () => {
 };
 
 const generateFilmCard = () => ({
+  id: nanoid(),
   title: getRandomArrayElement(titles),
   alternativeTitle: getRandomArrayElement(titles),
   totalRating: getRandomNumber(TotalRating.MIN, TotalRating.MAX, 1),
