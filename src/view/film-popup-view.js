@@ -1,7 +1,7 @@
 import AbstractView from './abstract-view.js';
 import { getFormattedDate } from '../utils.js';
 
-const createFilmDetailsPopupTemplate = ({title, alternativeTitle, totalRating, poster, ageRating, director, writers, actors, releaseDate, releaseCountry, runtime, genres, description, isWatchList, isWatched, isFavorite, comments}) => {
+const createFilmPopupTemplate = ({title, alternativeTitle, totalRating, poster, ageRating, director, writers, actors, releaseDate, releaseCountry, runtime, genres, description, isWatchList, isWatched, isFavorite, comments}) => {
 
   const activeClassName = (item) => item ? 'film-details__control-button--active' : '';
 
@@ -135,7 +135,7 @@ const createFilmDetailsPopupTemplate = ({title, alternativeTitle, totalRating, p
   </section>`;
 };
 
-export default class FilmDetailsPopupView extends AbstractView {
+export default class FilmPopupView extends AbstractView {
   #card = null;
 
   constructor(card) {
@@ -144,7 +144,7 @@ export default class FilmDetailsPopupView extends AbstractView {
   }
 
   get template() {
-    return createFilmDetailsPopupTemplate(this.#card);
+    return createFilmPopupTemplate(this.#card);
   }
 
   setCloseButtonClickHandler = (callback) => {
@@ -152,8 +152,38 @@ export default class FilmDetailsPopupView extends AbstractView {
     this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#closeButtonClickHandler);
   }
 
+  setWatchlistClickHandler = (callback) => {
+    this._callback.watchlistClick = callback;
+    this.element.querySelector('.film-details__control-button--watchlist').addEventListener('click', this.#watchlistClickHandler);
+  }
+
+  setWatchedClickHandler = (callback) => {
+    this._callback.watchedClick = callback;
+    this.element.querySelector('.film-details__control-button--watched').addEventListener('click', this.#watchedClickHandler);
+  }
+
+  setFavoriteClickHandler = (callback) => {
+    this._callback.favoriteClick = callback;
+    this.element.querySelector('.film-details__control-button--favorite').addEventListener('click', this.#favoriteClickHandler);
+  }
+
   #closeButtonClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.closeButtonClick();
+  }
+
+  #watchlistClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.watchlistClick();
+  }
+
+  #watchedClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.watchedClick();
+  }
+
+  #favoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.favoriteClick();
   }
 }
