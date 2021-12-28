@@ -1,6 +1,5 @@
 import { generateFilmCard } from './mock/film-card.js';
-
-import { render } from './render.js';
+import { render } from './utils/render.js';
 
 import ProfileView from './view/profile-view.js';
 import MainNavigationView from './view/main-navigation-view.js';

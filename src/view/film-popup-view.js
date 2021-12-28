@@ -1,5 +1,5 @@
 import AbstractView from './abstract-view.js';
-import { getFormattedDate } from '../utils.js';
+import { getFormattedDate } from '../utils/common.js';
 
 const createFilmPopupTemplate = ({title, alternativeTitle, totalRating, poster, ageRating, director, writers, actors, releaseDate, releaseCountry, runtime, genres, description, isWatchList, isWatched, isFavorite, comments}) => {
 
