@@ -1,6 +1,6 @@
 import FilmCardView from '../view/film-card-view.js';
 import FilmPopupView from '../view/film-popup-view.js';
-import { render, replace, remove } from '../render.js';
+import { render, replace, remove } from '../utils/render.js';
 
 export default class FilmCardPresenter {
   #filmsListContainer = null;
@@ -38,6 +38,10 @@ export default class FilmCardPresenter {
     }
 
     remove(prevFilmCardComponent);
+
+    if (this.#filmPopupComponent !== null) {
+      this.#renderFilmPopup();
+    }
   }
 
   #renderFilmPopup = () => {
