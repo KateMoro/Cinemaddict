@@ -1,5 +1,5 @@
 import AbstractView from './abstract-view.js';
-import { getFormattedDate } from '../utils.js';
+import { getFormattedDate } from '../utils/common.js';
 
 const createFilmCardTemplate = ({title, totalRating, releaseDate, runtime, genres, poster, description, comments, isWatchList, isWatched, isFavorite}) => {
 

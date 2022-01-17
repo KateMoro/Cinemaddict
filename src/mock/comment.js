@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { getRandomNumber, getRandomArrayElement } from './../utils.js';
+import { getRandomNumber, getRandomArrayElement } from '../utils/common.js';
 
 const authors = [
   'Kuzma Sharp',

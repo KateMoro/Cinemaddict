@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { nanoid } from 'nanoid';
-import { getRandomNumber, getRandomArrayElement, getRandomArray, getTimeFromMins } from './../utils.js';
+import { getRandomNumber, getRandomArrayElement, getRandomArray, getTimeFromMins } from '../utils/common.js';
 import { generateComment } from './comment.js';
 
 const TotalRating = {
