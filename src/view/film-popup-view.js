@@ -1,4 +1,4 @@
-import AbstractView from './abstract-view.js';
+import SmartView from './smart-view.js';
 import { getFormattedDate } from '../utils/common.js';
 
 const createFilmPopupTemplate = ({title, alternativeTitle, totalRating, poster, ageRating, director, writers, actors, releaseDate, releaseCountry, runtime, genres, description, isWatchList, isWatched, isFavorite, comments}) => {
@@ -135,8 +135,7 @@ const createFilmPopupTemplate = ({title, alternativeTitle, totalRating, poster, 
   </section>`;
 };
 
-export default class FilmPopupView extends AbstractView {
-  #card = null;
+export default class FilmPopupView extends SmartView {
 
   constructor(card) {
     super();
