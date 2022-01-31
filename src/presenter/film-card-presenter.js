@@ -58,7 +58,7 @@ export default class FilmCardPresenter {
     this.#mode = Mode.POPUP;
     const prevFilmPopupComponent = this.#filmPopupComponent;
 
-    this.#filmPopupComponent = new FilmPopupView(this.#film, this.#commentsModel.init(this.#film.id));
+    this.#filmPopupComponent = new FilmPopupView(this.#film);
 
     this.#filmPopupComponent.setCloseButtonClickHandler(this.#handleCloseButtonClick);
     this.#filmPopupComponent.setWatchlistClickHandler(this.#handleWatchlistClick);
