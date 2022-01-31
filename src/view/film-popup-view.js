@@ -1,5 +1,6 @@
-import SmartView from './smart-view.js';
+import he from 'he';
 import { getFormattedDate } from '../utils/common.js';
+import SmartView from './smart-view.js';
 
 const createFilmPopupTemplate = ({
   title,
@@ -19,7 +20,7 @@ const createFilmPopupTemplate = ({
   isWatched,
   isFavorite,
   comments,
-  newCommentEmotion}) => {
+  newCommentEmotion}, filmComments=[]) => {
 
   const activeClassName = (item) => item ? 'film-details__control-button--active' : '';
 
@@ -30,7 +31,7 @@ const createFilmPopupTemplate = ({
     <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
   </span>
   <div>
-    <p class="film-details__comment-text">${comment}</p>
+    <p class="film-details__comment-text">${he.encode(comment)}</p>
     <p class="film-details__comment-info">
       <span class="film-details__comment-author">${author}</span>
       <span class="film-details__comment-day">${getFormattedDate(date, 'YYYY/MM/DD HH:mm')}</span>
@@ -150,7 +151,7 @@ const createFilmPopupTemplate = ({
         <section class="film-details__comments-wrap">
           <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
           <ul class="film-details__comments-list">
-            ${createCommentTemplate(comments).join('')}
+            ${createCommentTemplate(filmComments).join('')}
           </ul>
           ${createNewCommentTemplate(newCommentEmotion)}
         </section>
@@ -203,6 +204,26 @@ export default class FilmPopupView extends SmartView {
     this.element.querySelector(`[value=${target.value}]`).checked = true;
   }
 
+  #commentSubmitHandler = (evt) => {
+    if (evt.key === 'Enter' && (evt.ctrlKey || evt.metaKey)) {
+      evt.preventDefault();
+
+      const newComment = {
+        author: 'Andzelika Franke',
+        comment: this._data.newCommentText,
+        date: Date.now(),
+        emotion: this._data.newCommentEmotion,
+      };
+
+      this._callback.commentSubmit(newComment);
+    }
+  }
+
+  #deleteButtonClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.deleteButtonClick();
+  }
+
   #commentInputHandler = (evt) => {
     evt.preventDefault();
     this.updateData({newCommentText: evt.target.value}, true);
@@ -226,6 +247,17 @@ export default class FilmPopupView extends SmartView {
   setFavoriteClickHandler = (callback) => {
     this._callback.favoriteClick = callback;
     this.element.querySelector('.film-details__control-button--favorite').addEventListener('click', this.#favoriteClickHandler);
+  }
+
+  setCommentSubmitHandler = (callback) => {
+    this._callback.commentSubmit = callback;
+    document.addEventListener('keydown', this.#commentSubmitHandler);
+  }
+
+  setDeleteButtonClickHandler = (callback) => {
+    this._callback.deleteButtonClick = callback;
+    this.element.querySelectorAll('.film-details__comment-delete')
+      .forEach((button) => button.addEventListener('click', this.#deleteButtonClickHandler));
   }
 
   #closeButtonClickHandler = (evt) => {
