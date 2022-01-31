@@ -7,16 +7,18 @@ export default class FilmCardPresenter {
   #filmsListContainer = null;
   #changeData = null;
   #changeMode = null;
+  #commentsModel = null;
   #film = null;
   #filmCardComponent = null;
   #filmPopupComponent = null;
 
   #mode = Mode.DEFAULT;
 
-  constructor(filmsListContainer, changeData, changeMode) {
+  constructor(filmsListContainer, changeData, changeMode, commentsModel) {
     this.#filmsListContainer = filmsListContainer;
     this.#changeData = changeData;
     this.#changeMode = changeMode;
+    this.#commentsModel = commentsModel;
   }
 
   init = (film) => {
@@ -54,6 +56,9 @@ export default class FilmCardPresenter {
   }
 
   #renderFilmPopup = async () => {
+    const comments = this.#commentsModel.init(this.#film.id);
+    // eslint-disable-next-line no-console
+    console.log('renderFilmPopup', comments);
 
     this.#mode = Mode.POPUP;
     const prevFilmPopupComponent = this.#filmPopupComponent;

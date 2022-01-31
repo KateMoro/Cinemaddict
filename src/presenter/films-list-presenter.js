@@ -17,6 +17,7 @@ export default class FilmsListPresenter {
   #filmsContainer = null;
   #filmsModel = null;
   #filterModel = null;
+  #commentsModel = null;
 
   #filmsComponent = new FilmsView();
   #filmsListComponent = new FilmsListView();
@@ -34,10 +35,11 @@ export default class FilmsListPresenter {
   #filterType = FilterType.ALL;
   #isLoading = true;
 
-  constructor(filmsContainer, filmsModel, filterModel) {
+  constructor(filmsContainer, filmsModel, filterModel, commentsModel) {
     this.#filmsContainer = filmsContainer;
     this.#filmsModel = filmsModel;
     this.#filterModel = filterModel;
+    this.#commentsModel = commentsModel;
   }
 
   get films() {
@@ -129,7 +131,8 @@ export default class FilmsListPresenter {
   }
 
   #renderFilmCard = (film) => {
-    const filmCardPresenter = new FilmCardPresenter(this.#filmsListContainerComponent, this.#handleViewAction, this.#handleModeChange);
+    const filmCardPresenter = new FilmCardPresenter(this.#filmsListContainerComponent,
+      this.#handleViewAction, this.#handleModeChange, this.#commentsModel);
     filmCardPresenter.init(film);
     this.#filmCardPresenter.set(film.id, filmCardPresenter);
   }
