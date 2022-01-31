@@ -27,7 +27,3 @@ filmsPresenter.init();
 filmsModel.init().finally(() => {
   render(pageFooter, new FooterStatisticsView(filmsModel.films));
 });
-
-
-const filmsPresenter = new FilmsListPresenter(pageMain);
-filmsPresenter.init(cards);
