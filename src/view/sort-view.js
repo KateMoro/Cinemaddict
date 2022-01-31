@@ -1,39 +1,35 @@
-import AbstractView from './abstract-view.js';
 import { SortType } from '../utils/const.js';
+import AbstractView from './abstract-view.js';
 
-const createSortTemplate = () => (`
+const createSortTemplate = (currentSortType) => (`
   <ul class="sort">
-    <li><a href="#" class="sort__button sort__button--active" data-sort-type="${SortType.DEFAULT}">Sort by default</a></li>
-    <li><a href="#" class="sort__button" data-sort-type="${SortType.DATE}">Sort by date</a></li>
-    <li><a href="#" class="sort__button" data-sort-type="${SortType.RATING}">Sort by rating</a></li>
+    <li><a href="#" class="sort__button ${currentSortType === SortType.DEFAULT ? 'sort__button--active' : ''}" data-sort-type="${SortType.DEFAULT}">Sort by default</a></li>
+    <li><a href="#" class="sort__button ${currentSortType === SortType.DATE ? 'sort__button--active' : ''}" data-sort-type="${SortType.DATE}">Sort by date</a></li>
+    <li><a href="#" class="sort__button ${currentSortType === SortType.RATING ? 'sort__button--active' : ''}" data-sort-type="${SortType.RATING}">Sort by rating</a></li>
   </ul>
 `);
-
 export default class SortView extends AbstractView {
+  #currentSortType = null;
+
+  constructor(currentSortType) {
+    super();
+    this.#currentSortType = currentSortType;
+  }
+
   get template() {
-    return createSortTemplate();
-  }
-
-  #changeActiveClass = (target) => {
-    const buttons = this.element.querySelectorAll('.sort__button');
-    buttons.forEach((button) => button.classList.remove('sort__button--active'));
-    target.classList.add('sort__button--active');
-  }
-
-  #sortTypeChangeHandler = (evt) => {
-    const target = evt.target;
-
-    if (target.tagName !== 'A') {
-      return;
-    }
-
-    evt.preventDefault();
-    this.#changeActiveClass(target);
-    this._callback.sortTypeChange(target.dataset.sortType);
+    return createSortTemplate(this.#currentSortType);
   }
 
   setSortTypeChangeHandler = (callback) => {
     this._callback.sortTypeChange = callback;
     this.element.addEventListener('click', this.#sortTypeChangeHandler);
+  }
+
+  #sortTypeChangeHandler = (evt) => {
+    if (evt.target.tagName !== 'A') {
+      return;
+    }
+    evt.preventDefault();
+    this._callback.sortTypeChange(evt.target.dataset.sortType);
   }
 }
