@@ -66,6 +66,8 @@ body {
   max-width: 1240px;
   padding: var(--vertical-gap) var(--horizontal-gap) 0;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .hide-overflow {
@@ -543,6 +545,7 @@ button {
 }
 
 .footer {
+  margin-top: auto;
   align-items: center;
   background: url('../images/background.png') no-repeat 50% 0;
   display: flex;

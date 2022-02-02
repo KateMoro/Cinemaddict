@@ -1,24 +1,27 @@
-import { generateFilmCard } from './mock/film-card.js';
 import { render } from './utils/render.js';
-
-import ProfileView from './view/profile-view.js';
-import MainNavigationView from './view/main-navigation-view.js';
+import { END_POINT, AUTHORIZATION } from './utils/const.js';
 import FooterStatisticsView from './view/footer-statistics-view.js';
-
+import FilterPresenter from './presenter/filter-presenter.js';
 import FilmsListPresenter from './presenter/films-list-presenter.js';
+import FilterModel from './model/filter-model.js';
+import FilmsModel from './model/films-model.js';
+import ApiService from './api-service.js';
 
-const CARD_COUNT = 18;
-
-const cards = Array.from({length: CARD_COUNT}, generateFilmCard);
+const apiService = new ApiService(END_POINT, AUTHORIZATION);
 
 const pageHeader = document.querySelector('.header');
 const pageMain = document.querySelector('.main');
-const pageFooter = document.querySelector('.footer');
-const pageFooterStatistics = pageFooter.querySelector('.footer__statistics');
+const pageFooter = document.querySelector('.footer__statistics');
 
-render(pageHeader, new ProfileView());
-render(pageMain, new MainNavigationView());
-render(pageFooterStatistics, new FooterStatisticsView());
+const filterModel = new FilterModel();
+const filmsModel = new FilmsModel(apiService);
 
-const filmsPresenter = new FilmsListPresenter(pageMain);
-filmsPresenter.init(cards);
+const filmsPresenter = new FilmsListPresenter(pageMain, filmsModel, filterModel);
+const filterPresenter = new FilterPresenter(pageHeader, pageMain, filmsModel, filterModel, filmsPresenter);
+
+filterPresenter.init();
+filmsPresenter.init();
+
+filmsModel.init().finally(() => {
+  render(pageFooter, new FooterStatisticsView(filmsModel.films));
+});
