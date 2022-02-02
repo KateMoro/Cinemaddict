@@ -4,22 +4,24 @@ import { filter } from '../utils/filter.js';
 
 import ProfileView from '../view/profile-view.js';
 import MainNavigationView from '../view/main-navigation-view.js';
+import StatisticsView from '../view/statistics-view.js';
 
 export default class FilterPresenter {
   #profileContainer = null;
   #filterContainer = null;
-
   #filmsModel = null;
   #filterModel = null;
-
+  #filmsPresenter = null;
   #profileComponent = null;
   #filterComponent = null;
+  #statisticsComponent = null;
 
-  constructor(profileContainer, filterContainer, filmsModel, filterModel) {
+  constructor(profileContainer, filterContainer, filmsModel, filterModel, filmsPresenter) {
     this.#profileContainer = profileContainer;
     this.#filterContainer = filterContainer;
     this.#filmsModel = filmsModel;
     this.#filterModel = filterModel;
+    this.#filmsPresenter = filmsPresenter;
 
     this.#filmsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
@@ -52,7 +54,7 @@ export default class FilterPresenter {
     ];
   }
 
-  get watchedFilms() {
+  get watchedFilmsCount() {
     return this.filters.find((item) => item.type === FilterType.HISTORY).count;
   }
 
@@ -60,7 +62,7 @@ export default class FilterPresenter {
     const prevProfileComponent = this.#profileComponent;
     const prevFilterComponent = this.#filterComponent;
 
-    this.#profileComponent = new ProfileView(this.watchedFilms);
+    this.#profileComponent = new ProfileView(this.watchedFilmsCount);
 
     this.#filterComponent = new MainNavigationView(this.filters, this.#filterModel.filter);
     this.#filterComponent.setFilterTypeChangeHandler(this.#handleFilterTypeClick);
@@ -85,6 +87,21 @@ export default class FilterPresenter {
   #handleFilterTypeClick = (filterType) => {
     if (this.#filterModel.filter === filterType) {
       return;
+    }
+
+    if (filterType === FilterType.STATS) {
+      if (this.#statisticsComponent === null) {
+        this.#filmsPresenter.destroy();
+        this.#statisticsComponent = new StatisticsView(this.#filmsModel.films);
+        render(this.#filterContainer, this.#statisticsComponent);
+      }
+    } else {
+      if (this.#statisticsComponent) {
+        remove(this.#statisticsComponent);
+        this.#statisticsComponent = null;
+        this.#filmsPresenter.destroy();
+        this.#filmsPresenter.init();
+      }
     }
 
     this.#filterModel.setFilter(UpdateType.MAJOR, filterType);

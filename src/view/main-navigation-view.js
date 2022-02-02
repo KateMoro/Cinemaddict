@@ -61,6 +61,5 @@ export default class MainNavigationView extends AbstractView {
 
     evt.preventDefault();
     this._callback.filterTypeChange(target.dataset.filterType);
-
   }
 }

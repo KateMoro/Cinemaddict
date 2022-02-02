@@ -1,24 +1,27 @@
 import { render, replace, remove } from '../utils/render.js';
-import { UserAction, UpdateType, Mode } from '../utils/const.js';
+import { END_POINT, AUTHORIZATION, UserAction, UpdateType, Mode } from '../utils/const.js';
 
 import FilmCardView from '../view/film-card-view.js';
 import FilmPopupView from '../view/film-popup-view.js';
+
+import ApiService from '../api-service.js';
+import CommentsModel from '../model/comments-model.js';
+
 export default class FilmCardPresenter {
   #filmsListContainer = null;
   #changeData = null;
   #changeMode = null;
-  #commentsModel = null;
   #film = null;
   #filmCardComponent = null;
   #filmPopupComponent = null;
-
+  #apiService = null;
+  #commentsModel = null;
   #mode = Mode.DEFAULT;
 
-  constructor(filmsListContainer, changeData, changeMode, commentsModel) {
+  constructor(filmsListContainer, changeData, changeMode) {
     this.#filmsListContainer = filmsListContainer;
     this.#changeData = changeData;
     this.#changeMode = changeMode;
-    this.#commentsModel = commentsModel;
   }
 
   init = (film) => {
@@ -55,15 +58,31 @@ export default class FilmCardPresenter {
     }
   }
 
+  // setViewState = (state) => {
+  //   switch (state) {
+  //     case State.SAVING:
+  //       this.#filmPopupComponent.updateData({
+  //         isDisabled: true,
+  //         isSaving: true,
+  //       });
+  //       break;
+  //     case State.DELETING:
+  //       this.#filmPopupComponent.updateData({
+  //         isDisabled: true,
+  //         isDeleting: true,
+  //       });
+  //       break;
+  //   }
+  // }
+
   #renderFilmPopup = async () => {
-    const comments = this.#commentsModel.init(this.#film.id);
-    // eslint-disable-next-line no-console
-    console.log('renderFilmPopup', comments);
+    this.#apiService = new ApiService(END_POINT, AUTHORIZATION);
+    this.#commentsModel = new CommentsModel(this.#apiService, this.#film.id);
+    await this.#commentsModel.init();
 
     this.#mode = Mode.POPUP;
     const prevFilmPopupComponent = this.#filmPopupComponent;
-
-    this.#filmPopupComponent = new FilmPopupView(this.#film);
+    this.#filmPopupComponent = new FilmPopupView(this.#film, this.#commentsModel.comments);
 
     this.#filmPopupComponent.setCloseButtonClickHandler(this.#handleCloseButtonClick);
     this.#filmPopupComponent.setWatchlistClickHandler(this.#handleWatchlistClick);
@@ -89,7 +108,6 @@ export default class FilmCardPresenter {
 
   #handleLinkClick = () => {
     this.#changeMode();
-
     this.#renderFilmPopup();
     document.body.classList.add('hide-overflow');
   }
@@ -131,23 +149,49 @@ export default class FilmCardPresenter {
   }
 
   #handleCommentSubmit = (newComment) => {
-    this.#film.comments.push(newComment);
-
-    this.#changeData(
+    this.#handleViewAction(
       UserAction.ADD_COMMENT,
+      UpdateType.MINOR,
+      newComment
+    );
+    this.#changeData(
+      UserAction.UPDATE_FILM,
       UpdateType.PATCH,
-      {...this.#film}
+      {...this.#film, comments: this.#film.comments}
     );
   }
 
-  #handleDeleteButtonClick = (deletedComment) => {
-    this.#film.comments = this.#film.comments.filter((comment) => comment.id !== deletedComment.id);
-
-    this.#changeData(
+  #handleDeleteButtonClick = (deletedCommentId) => {
+    this.#handleViewAction(
       UserAction.DELETE_COMMENT,
       UpdateType.PATCH,
-      {...this.#film}
+      deletedCommentId
     );
+
+    const index = this.#film.comments.findIndex((item) => item === deletedCommentId);
+    this.#film.comments = [
+      ...this.#film.comments.slice(0, index),
+      ...this.#film.comments.slice(index + 1),
+    ];
+
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {...this.#film, comments: this.#film.comments}
+    );
+  }
+
+  #handleViewAction = async (actionType, updateType, update) => {
+    switch (actionType) {
+      case UserAction.ADD_COMMENT:
+        // this.setViewState(State.SAVING);
+        this.#commentsModel.addComment(updateType, update);
+        break;
+      case UserAction.DELETE_COMMENT:
+        // this.setViewState(State.DELETING);
+        this.#commentsModel.deleteComment(updateType, update);
+        break;
+    }
   }
 
   #closeFilmPopup = () => {
