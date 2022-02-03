@@ -1,5 +1,5 @@
 import he from 'he';
-import { getFormattedDate } from '../utils/common.js';
+import { getFormattedDate, getTimeFromMins } from '../utils/common.js';
 import SmartView from './smart-view.js';
 
 const createFilmPopupTemplate = ({
@@ -112,14 +112,14 @@ const createFilmPopupTemplate = ({
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Runtime</td>
-                <td class="film-details__cell">${runtime}</td>
+                <td class="film-details__cell">${getTimeFromMins(runtime)}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Country</td>
                 <td class="film-details__cell">${releaseCountry}</td>
               </tr>
               <tr class="film-details__row">
-                <td class="film-details__term">Genres</td>
+                <td class="film-details__term">${genres.length > 1 ? 'Genres' : 'Genre'}</td>
                 <td class="film-details__cell">${createGenresTemplate(genres).join('')}</td>
               </tr>
             </table>

@@ -1,9 +1,11 @@
+import { getFormattedDate, getTimeFromMins } from '../utils/common.js';
 import AbstractView from './abstract-view.js';
-import { getFormattedDate } from '../utils/common.js';
 
 const createFilmCardTemplate = ({title, totalRating, releaseDate, runtime, genres, poster, description, comments, isWatchList, isWatched, isFavorite}) => {
 
   const activeClassName = (item) => item ? 'film-card__controls-item--active' : '';
+
+  const truncateString = (str, maxlength) => str.length > maxlength ? `${str.slice(0, maxlength - 1)}…` : str;
 
   return `<article class="film-card">
     <a class="film-card__link">
@@ -11,11 +13,11 @@ const createFilmCardTemplate = ({title, totalRating, releaseDate, runtime, genre
       <p class="film-card__rating">${totalRating}</p>
       <p class="film-card__info">
         <span class="film-card__year">${getFormattedDate(releaseDate, 'YYYY')}</span>
-        <span class="film-card__duration">${runtime}</span>
+        <span class="film-card__duration">${getTimeFromMins(runtime)}</span>
         <span class="film-card__genre">${genres[0]}</span>
       </p>
       <img src=${poster} alt="" class="film-card__poster">
-      <p class="film-card__description">${description}</p>
+      <p class="film-card__description">${truncateString(description, 140)}</p>
       <span class="film-card__comments">${comments.length} comments</span>
     </a>
     <div class="film-card__controls">
