@@ -1,21 +1,5 @@
+import { getUserRank } from '../utils/common.js';
 import AbstractView from './abstract-view.js';
-import { UserRank } from '../utils/const.js';
-
-const getUserRank = (watchedFilms) => {
-  if (watchedFilms > 0 && watchedFilms <= 10) {
-    return UserRank.NOVICE;
-  }
-
-  if (watchedFilms > 10 && watchedFilms <= 20) {
-    return UserRank.FAN;
-  }
-
-  if (watchedFilms > 20) {
-    return UserRank.MOVIE_BUFF;
-  }
-
-  return '';
-};
 
 const createProfileTemplate = (watchedFilms) => (`
   <section class="header__profile profile">

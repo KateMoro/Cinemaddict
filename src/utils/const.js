@@ -36,6 +36,7 @@ export const Mode = {
 export const State = {
   SAVING: 'SAVING',
   DELETING: 'DELETING',
+  ABORTING: 'ABORTING',
 };
 
 export const UserRank = {
@@ -44,3 +45,10 @@ export const UserRank = {
   MOVIE_BUFF: 'Movie Buff',
 };
 
+export const StatisticFilterType = {
+  ALL:'all-time',
+  TODAY: 'today',
+  WEEK: 'week',
+  MONTH: 'month',
+  YEAR: 'year',
+};

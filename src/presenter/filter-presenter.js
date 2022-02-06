@@ -92,7 +92,7 @@ export default class FilterPresenter {
     if (filterType === FilterType.STATS) {
       if (this.#statisticsComponent === null) {
         this.#filmsPresenter.destroy();
-        this.#statisticsComponent = new StatisticsView(this.#filmsModel.films);
+        this.#statisticsComponent = new StatisticsView( filter[FilterType.HISTORY](this.#filmsModel.films) );
         render(this.#filterContainer, this.#statisticsComponent);
       }
     } else {
