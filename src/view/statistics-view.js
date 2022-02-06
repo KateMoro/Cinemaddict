@@ -89,7 +89,6 @@ const createStatisticsTemplate = (watchedFilms, films, statsFilters, currentFilt
     topGenre = sortGenres(countFilmsByGenre(allFilmGenres))[0][0];
   }
 
-
   const createStatisticFilterTemplate = (filters, currentFilter) => filters.map(({ type, name }) => `
     <input
       type="radio"
